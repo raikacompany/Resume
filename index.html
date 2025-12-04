@@ -1657,13 +1657,15 @@
 <!--END--- FormAfzar.Com ----->
 
 
+
   <footer>
     این صفحه به‌عنوان رزومه اجرایی و برند شخصی <span>محمد صالح نکوئی سامانی</span> طراحی شده است.
   </footer>
 </div>
 
+<!-- اسکریپت ریویل و موزیک -->
 <script>
-  // ریویل اسکرول
+  // ریویل با اسکرول
   const observer = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
@@ -1676,42 +1678,26 @@
     observer.observe(el);
   });
 
-  // --- کنترل موزیک حرفه‌ای ---
-  const audio = document.getElementById("bg-music");
-  const btn = document.getElementById("music-toggle");
+  // موزیک
+  const audio = document.getElementById('bg-music');
+  const toggleBtn = document.getElementById('music-toggle');
+  let isMuted = true;
 
-  // هنگام ورود به سایت → تلاش برای پخش آرام (بی‌صدا)
-  window.addEventListener("load", () => {
-      audio.muted = true;
+  function updateIcon(){
+    toggleBtn.textContent = isMuted ? '♫' : '♪';
+    toggleBtn.classList.toggle('muted', isMuted);
+  }
 
-      audio.play()
-        .then(() => {
-          setTimeout(() => {
-              audio.muted = false;
-              btn.classList.remove("muted");
-              btn.classList.add("playing");
-          }, 300);
-        })
-        .catch(() => {
-          // اگر مرورگر اجازه autoplay ندهد:
-          btn.classList.add("muted");
-        });
+  toggleBtn.addEventListener('click', ()=>{
+    if(isMuted){
+      audio.play().catch(()=>{});
+      isMuted = false;
+    }else{
+      audio.pause();
+      isMuted = true;
+    }
+    updateIcon();
   });
-
-  // کلیک روی دکمه موزیک
-  btn.addEventListener("click", () => {
-      if (audio.paused) {
-          audio.play();
-          btn.classList.add("playing");
-          btn.classList.remove("muted");
-      } else {
-          audio.pause();
-          btn.classList.remove("playing");
-          btn.classList.add("muted");
-      }
-  });
-</script>
-
 
   updateIcon();
 </script>
