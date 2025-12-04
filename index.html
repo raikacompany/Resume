@@ -689,37 +689,78 @@
 
     footer span{color:var(--gold-soft);}
 
-<script>
-const audio = document.getElementById("bg-music");
-const btn = document.getElementById("music-toggle");
+    
+/* — دکمه موزیک فوق خاص، سبک کریستالی — */
+.music-toggle {
+  position: fixed;
+  left: 20px;
+  bottom: 22px;
 
-window.addEventListener("load", () => {
-    audio.muted = true;
-    audio.play().then(() => {
-        setTimeout(() => {
-            audio.muted = false;
-            btn.classList.remove("muted");
-            btn.classList.add("playing");
-        }, 400);
-    }).catch(() => {
-        btn.classList.add("muted");
-    });
-});
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
 
-btn.addEventListener("click", () => {
-    if (audio.paused) {
-        audio.play();
-        btn.classList.add("playing");
-        btn.classList.remove("muted");
-    } else {
-        audio.pause();
-        btn.classList.remove("playing");
-        btn.classList.add("muted");
-    }
-});
-</script>
+  /* کریستالی + نئونی */
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
 
-    }
+  border: 1px solid rgba(255,255,255,0.25);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: 0.25s ease-in-out;
+  z-index: 150;
+
+  /* شبیه الماس نورانی */
+  box-shadow:
+    0 8px 26px rgba(0,0,0,0.45),
+    0 0 12px rgba(255,215,0,0.30),
+    inset 0 0 8px rgba(255,255,255,0.20);
+}
+
+/* حالت هاور */
+.music-toggle:hover {
+  transform: scale(1.14);
+  background: rgba(255,255,255,0.14);
+  box-shadow:
+    0 10px 36px rgba(0,0,0,0.55),
+    0 0 22px rgba(255,230,90,0.55),
+    inset 0 0 12px rgba(255,255,255,0.28);
+}
+
+/* آیکون موج صوتی */
+.music-toggle svg {
+  width: 24px;
+  height: 24px;
+  stroke: #facc15;
+  stroke-width: 2;
+  fill: none;
+  transition: 0.3s ease;
+}
+
+/* حالت پخش */
+.music-toggle.playing svg {
+  stroke: #ffe680;
+  animation: waveMove 0.9s infinite ease-in-out;
+}
+
+/* حالت mute */
+.music-toggle.muted svg {
+  opacity: 0.4;
+}
+
+/* انیمیشن موج حرفه‌ای */
+@keyframes waveMove {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+
 
     /* چاپ */
     @media print{
@@ -733,7 +774,13 @@ btn.addEventListener("click", () => {
 
 <!-- موزیک پس‌زمینه -->
 <audio id="bg-music" src="0bikalam download1music.ir (10).mp3" loop></audio>
-<div class="music-toggle muted" id="music-toggle" title="پخش / توقف موزیک">♫</div>
+<div class="music-toggle muted" id="music-toggle">
+  <svg viewBox="0 0 24 24">
+    <path d="M4 12c1-4 4-4 5.5 0s-1 6-3 6-4-2-2.5-6z"></path>
+    <path d="M10 12c1.2-6 5.5-6 7 0s-2 8-4.5 8-4-2-2.5-8z"></path>
+    <path d="M17 12c0-2 1.4-3 2.8-3s2.2 1 2.2 3-1 4-2.5 4-2.5-2-2.5-4z"></path>
+  </svg>
+</div>
 
 <div class="page">
 
@@ -1615,9 +1662,8 @@ btn.addEventListener("click", () => {
   </footer>
 </div>
 
-<!-- اسکریپت ریویل و موزیک -->
 <script>
-  // ریویل با اسکرول
+  // ریویل اسکرول
   const observer = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
@@ -1630,30 +1676,45 @@ btn.addEventListener("click", () => {
     observer.observe(el);
   });
 
-  // موزیک
-  const audio = document.getElementById('bg-music');
-  const toggleBtn = document.getElementById('music-toggle');
-  let isMuted = true;
+  // --- کنترل موزیک حرفه‌ای ---
+  const audio = document.getElementById("bg-music");
+  const btn = document.getElementById("music-toggle");
 
-  function updateIcon(){
-    toggleBtn.textContent = isMuted ? '♫' : '♪';
-    toggleBtn.classList.toggle('muted', isMuted);
-  }
+  // هنگام ورود به سایت → تلاش برای پخش آرام (بی‌صدا)
+  window.addEventListener("load", () => {
+      audio.muted = true;
 
-  toggleBtn.addEventListener('click', ()=>{
-    if(isMuted){
-      audio.play().catch(()=>{});
-      isMuted = false;
-    }else{
-      audio.pause();
-      isMuted = true;
-    }
-    updateIcon();
+      audio.play()
+        .then(() => {
+          setTimeout(() => {
+              audio.muted = false;
+              btn.classList.remove("muted");
+              btn.classList.add("playing");
+          }, 300);
+        })
+        .catch(() => {
+          // اگر مرورگر اجازه autoplay ندهد:
+          btn.classList.add("muted");
+        });
   });
+
+  // کلیک روی دکمه موزیک
+  btn.addEventListener("click", () => {
+      if (audio.paused) {
+          audio.play();
+          btn.classList.add("playing");
+          btn.classList.remove("muted");
+      } else {
+          audio.pause();
+          btn.classList.remove("playing");
+          btn.classList.add("muted");
+      }
+  });
+</script>
+
 
   updateIcon();
 </script>
 
 </body>
 </html>
-
