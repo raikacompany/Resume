@@ -725,10 +725,38 @@
 <body>
 
 <!-- موزیک پس‌زمینه -->
-<audio id="bg-music" src="0bikalam download1music.ir (10).mp3" loop></audio>
+<!-- موزیک پس‌زمینه -->
+<audio id="bg-music" src="0bikalam download1music.ir (10).mp3" loop autoplay></audio>
+
 <div class="music-toggle muted" id="music-toggle" title="پخش / توقف موزیک">♫</div>
 
-<div class="page">
+<script>
+    const audio = document.getElementById("bg-music");
+
+    // تلاش برای پخش خودکار
+    window.addEventListener("load", () => {
+        // ابتدا بی‌صدا شروع کن که مرورگر اجازه بدهد
+        audio.muted = true;
+        audio.play().then(() => {
+            // بعد از شروع پخش، صدا را فعال می‌کنیم
+            setTimeout(() => {
+                audio.muted = false;
+            }, 500);
+        }).catch(err => {
+            console.log("Autoplay failed:", err);
+        });
+    });
+
+    // دکمه روشن/خاموش کردن موزیک
+    document.getElementById("music-toggle").addEventListener("click", () => {
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    });
+</script>
+
 
   <!-- هدر -->
   <header class="topbar">
@@ -1649,3 +1677,4 @@
 
 </body>
 </html>
+
